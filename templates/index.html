@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>计算你每天所需要的卡路里</title>
+</head>
+<body>
+  <h1>根据身高、生活习惯计算每天需要的卡路里</h1>
+  <form>
+    <label for="height">身高（厘米）：</label>
+    <input type="number" id="height">
+    <br>
+    <label for="activity-level">体力劳动水平：</label>
+    <select id="activity-level">
+      <option value="light">轻体力劳动者</option>
+      <option value="moderate">中体力劳动者</option>
+      <option value="heavy">重体力劳动者</option>
+      <option value="sedentary">长期卧床</option>
+    </select>
+    <br>
+    <input type="submit" value="计算">
+  </form>
+  <br>
+  <div id="results"></div>
+  <div style="display:none">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P1ZDL908XR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-P1ZDL908XR');
+    </script>
+  </div>
+  <script>
+    // 获取表单元素
+    const heightInput = document.getElementById('height');
+    const activityLevelSelect = document.getElementById('activity-level');
+    const resultsDiv = document.getElementById('results');
+
+    // 添加事件监听器
+    document.querySelector('form').addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // 获取表单数据
+      const height = heightInput.value;
+      const activityLevel = activityLevelSelect.value;
+
+      // 计算标准体重
+      const standardWeight = height - 105;
+
+      // 计算所需热量
+      let caloriesNeeded;
+      switch (activityLevel) {
+        case 'light':
+          caloriesNeeded = standardWeight * 30;
+          break;
+        case 'moderate':
+          caloriesNeeded = standardWeight * 35;
+          break;
+        case 'heavy':
+          caloriesNeeded = standardWeight * 40;
+          break;
+        case 'sedentary':
+          caloriesNeeded = standardWeight * 25;
+          break;
+      }
+
+      // 计算三大营养素的供能占比
+      const proteinPercentage = caloriesNeeded * 15 /100 /4;
+      const fatPercentage = caloriesNeeded * 30 /100 / 9;
+      const carbPercentage =  caloriesNeeded * 55/ 100 /4;
+
+      // 计算所需食物克数
+      const eggNeeded = proteinPercentage / 6;
+      // 每颗蛋大概油6克蛋白质
+      const milkNeeded = proteinPercentage / 6 * 200;
+      // 每200ml大概有6克蛋白质
+      const meetNeeded = proteinPercentage / 20 * 100;
+      // 每100克肉大概有17-20克蛋白质
+      const oilNeeded = fatPercentage
+
+
+      // 显示结果
+      resultsDiv.innerHTML = `
+        <h3>你的标准体重应为：${standardWeight} kg</h3>
+        <h3>每天所需热量：${caloriesNeeded} 千卡</h3>
+        <h3>建议每天三大营养素的饮食情况：</h3>
+        <ul>
+          <li>蛋白质：${proteinPercentage} 克</li>
+          <ul>
+            <li>鸡蛋：每天最多 ${eggNeeded} 个</li>
+            <li>肉：每天最多 ${meetNeeded} 克</li>
+            <li>牛奶：每天最多 ${milkNeeded} ml</li>
+          </ul>
+          <li>脂肪：${fatPercentage} 克</li>
+          <ul>
+            <li>动植物油：每天最多 ${proteinPercentage} 克</li>
+          </ul>
+          <li>碳水化合物：${carbPercentage} 克</li>
+           <ul>
+            <li>米饭：每天最多 ${carbPercentage}克</li>
+          </ul>
+        </ul>
+      `;
+    });
+  </script>
+</body>
+</html>
