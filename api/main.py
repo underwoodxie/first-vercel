@@ -13,5 +13,7 @@ def sitemap():
     return send_file(sitemap_file_path, mimetype='text/xml')
 
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)

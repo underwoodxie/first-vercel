@@ -1,109 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <title>计算你每天所需要的卡路里</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Based on your personal lifestyle habits, calculate the calories you need per day, advise you on your diet, and help you lose weight easily and naturally.">
+    <title>Lose Weight Naturally and Easily - Daily Calorie Calculator.</title>
+    <link rel="canonical" href="https://caloriecounter.cn/">
 </head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+    main {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    section {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    p {
+        color: #666;
+        margin-top: 0;
+    }
+
+    input[type="text"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+
+    #standardWeightResult,
+    #dailyCaloriesResult {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    h3 {
+        margin-top: 10px;
+    }
+
+    span {
+        color: #009688; /* Teal color */
+    }
+
+
+
+</style>
 <body>
-  <h1>根据身高、生活习惯计算每天需要的卡路里</h1>
-  <form>
-    <label for="height">身高（厘米）：</label>
-    <input type="number" id="height">
-    <br>
-    <label for="activity-level">体力劳动水平：</label>
-    <select id="activity-level">
-      <option value="light">轻体力劳动者</option>
-      <option value="moderate">中体力劳动者</option>
-      <option value="heavy">重体力劳动者</option>
-      <option value="sedentary">长期卧床</option>
-    </select>
-    <br>
-    <input type="submit" value="计算">
-  </form>
-  <br>
-  <div id="results"></div>
-  <div style="display:none">
+    <header>
+        <h1>Balanced diet to help you lose weight more efficiently.</h1>
+    </header>
+    <main>
+        <section>
+            <h2>1. Enter your height to calculate your ideal body weight.</h2>
+            <p>Please enter your height below (unit: centimeters):</p>
+            <input type="text" id="heightInput">
+            <button onclick="calculateStandardWeight()">Calculate standard body weight</button>
+            <p id="standardWeightResult"></p>
+        </section>
+        <section>
+            <h2>2. Select your personal lifestyle situation to calculate your daily calorie needs.</h2>
+            <p>Please select your exercise frequency:</p>
+            <select id="activityLevel">
+                <option value="light">Light physical activity(1-2 times of exercise per week)</option>
+                <option value="moderate">Moderate physical activity(3-4 times of exercise per week)</option>
+                <option value="sedentary">Sedentary lifestyle</option>
+            </select>
+            <button onclick="calculateDailyCalories()">Calculate calories</button>
+            <p id="dailyCaloriesResult"></p>
+        </section>
+        <section>
+            <h2>3. Recommended daily dietary distribution:</h2>
+            <h3>Protein:<span id="protein"></span> g</h3>
+            <h3>Fat:<span id="fat"></span> g</h3>
+            <h3>Carbohydrates: <span id="carbohydrate"></span> g</h3>
+            <p>The approximate energy contribution from protein, carbohydrates, and fat in daily food intake is 15%, 55%, and 30%, respectively.</p>
+        </section>
+    </main>
+    <div style="display:none">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P1ZDL908XR"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-P1ZDL908XR');
     </script>
   </div>
-  <script>
-    // 获取表单元素
-    const heightInput = document.getElementById('height');
-    const activityLevelSelect = document.getElementById('activity-level');
-    const resultsDiv = document.getElementById('results');
+    <script>
+        function calculateStandardWeight() {
+            const heightInput = document.getElementById('heightInput');
+            const height = parseFloat(heightInput.value);
+            if (isNaN(height)) {
+                alert('Please enter a valid height');
+                return;
+            }
+            const standardWeight = height - 105;
+            document.getElementById('standardWeightResult').textContent = `Your ideal body weight is：${standardWeight.toFixed(2)} kg`;
+        }
 
-    // 添加事件监听器
-    document.querySelector('form').addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      // 获取表单数据
-      const height = heightInput.value;
-      const activityLevel = activityLevelSelect.value;
-
-      // 计算标准体重
-      const standardWeight = height - 105;
-
-      // 计算所需热量
-      let caloriesNeeded;
-      switch (activityLevel) {
-        case 'light':
-          caloriesNeeded = standardWeight * 30;
-          break;
-        case 'moderate':
-          caloriesNeeded = standardWeight * 35;
-          break;
-        case 'heavy':
-          caloriesNeeded = standardWeight * 40;
-          break;
-        case 'sedentary':
-          caloriesNeeded = standardWeight * 25;
-          break;
-      }
-
-      // 计算三大营养素的供能占比
-      const proteinPercentage = caloriesNeeded * 15 /100 /4;
-      const fatPercentage = caloriesNeeded * 30 /100 / 9;
-      const carbPercentage =  caloriesNeeded * 55/ 100 /4;
-
-      // 计算所需食物克数
-      const eggNeeded = proteinPercentage / 6;
-      // 每颗蛋大概油6克蛋白质
-      const milkNeeded = proteinPercentage / 6 * 200;
-      // 每200ml大概有6克蛋白质
-      const meetNeeded = proteinPercentage / 20 * 100;
-      // 每100克肉大概有17-20克蛋白质
-      const oilNeeded = fatPercentage
-
-
-      // 显示结果
-      resultsDiv.innerHTML = `
-        <h3>你的标准体重应为：${standardWeight} kg</h3>
-        <h3>每天所需热量：${caloriesNeeded} 千卡</h3>
-        <h3>建议每天三大营养素的饮食情况：</h3>
-        <ul>
-          <li>蛋白质：${proteinPercentage} 克</li>
-          <ul>
-            <li>鸡蛋：每天最多 ${eggNeeded} 个</li>
-            <li>肉：每天最多 ${meetNeeded} 克</li>
-            <li>牛奶：每天最多 ${milkNeeded} ml</li>
-          </ul>
-          <li>脂肪：${fatPercentage} 克</li>
-          <ul>
-            <li>动植物油：每天最多 ${proteinPercentage} 克</li>
-          </ul>
-          <li>碳水化合物：${carbPercentage} 克</li>
-           <ul>
-            <li>米饭：每天最多 ${carbPercentage}克</li>
-          </ul>
-        </ul>
-      `;
-    });
-  </script>
+        function calculateDailyCalories() {
+            const activityLevel = document.getElementById('activityLevel').value;
+            let caloriesPerKg;
+            switch (activityLevel) {
+                case 'light':
+                    caloriesPerKg = 30;
+                    break;
+                case 'moderate':
+                    caloriesPerKg = 35;
+                    break;
+                case 'sedentary':
+                    caloriesPerKg = 25;
+                    break;
+                default:
+                    caloriesPerKg = 30; // 默认设为轻体力劳动者
+            }
+            const standardWeight = parseFloat(document.getElementById('standardWeightResult').textContent.split('：')[1]);
+            const dailyCalories = standardWeight * caloriesPerKg;
+            document.getElementById('dailyCaloriesResult').textContent = `Your daily calorie requirement is：${dailyCalories.toFixed(2)} kilocalories`;
+            const protein = (dailyCalories * 0.15) / 4; // 每克蛋白质产生4千卡能量
+            const fat = (dailyCalories * 0.30) / 9; // 每克脂肪产生9千卡能量
+            const carbohydrate = (dailyCalories * 0.55) / 4; // 每克碳水化合物产生4千卡能量
+            document.getElementById('protein').textContent = protein.toFixed(2);
+            document.getElementById('fat').textContent = fat.toFixed(2);
+            document.getElementById('carbohydrate').textContent = carbohydrate.toFixed(2);
+        }
+    </script>
 </body>
 </html>
